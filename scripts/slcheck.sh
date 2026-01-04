@@ -7,32 +7,40 @@ follow=false #se permite analiza recursiva a link urilor sau nu
 declare -A inodes #dictionar pentru inodes(coduri unice ale fisierelor)
 
 vf_broken_link() {
-	if [ -z "$1"  ]; then
-		return
+	fileToCheck="$1"
+	filename=$(basename $fileToCheck)
+	
+	if [[ -L $fileToCheck ]]; then
+		if [[ -e $fileToCheck ]]; then
+			echo "$filename nu este broken!"
+		else
+			echo "$filename este broken!"
+		fi
+		
+	else echo "$filename nu este link!"
+		
 	fi
-	echo "Verific $(basename "$1")"
 }
-#cod intermediar,va fi inlocuit
+# s-a produs merge
 
 verificari() {
-if [ -z "$1" ] || [ ! -d "$1"]; then #se verifica primirea unui parametru
-        echo "Va rugam sa introduceti un parametru"
-        exit 1
-fi
+	if [ -z "$1" ] || [ ! -d "$1"]; then #se verifica primirea unui parametru
+		echo "Va rugam sa introduceti un parametru"
+		exit 1
+	fi
 
-if [ -n "$2" ]; then #se verifica primirea celui de al doilea parametru
-                case "$2" in
+	if [ -n "$2" ]; then #se verifica primirea celui de al doilea parametru
+		case "$2" in
 
-                "-follow-symlinks")
-                        follow=true
-                        ;;
-                *)
-                        echo "Al doilea parametru este invalid"
-                        exit 1
-                        ;;
-                esac
-fi
-
+		"-follow-symlinks")
+			follow=true
+			;;
+		*)
+			echo "Al doilea parametru este invalid"
+			exit 1
+			;;
+		esac
+	fi
 }
 
 parcurgere() {
