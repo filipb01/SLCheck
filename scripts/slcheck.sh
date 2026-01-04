@@ -1,6 +1,6 @@
 #!/bin/bash
 
-shopt -s dotglob #pentru includerea fisierelor ascunse(cele ce incep cu '.')
+#shopt -s dotglob #pentru includerea fisierelor ascunse(cele ce incep cu '.')
 
 follow=false #se permite analiza recursiva a link urilor sau nu
 
@@ -8,7 +8,7 @@ declare -A inodes #dictionar pentru inodes(coduri unice ale fisierelor)
 
 vf_broken_link() {
 	fileToCheck="$1"
-	filename=$(basename $fileToCheck)
+	filename=$(basename "$fileToCheck")
 	
 	if [[ -L $fileToCheck ]]; then
 		if [[ -e $fileToCheck ]]; then
@@ -16,15 +16,12 @@ vf_broken_link() {
 		else
 			echo "$filename este broken!"
 		fi
-		
-	else echo "$filename nu este link!"
-		
 	fi
 }
 # s-a produs merge
 
 verificari() {
-	if [ -z "$1" ] || [ ! -d "$1"]; then #se verifica primirea unui parametru
+	if [ -z "$1" ] || [ ! -d "$1" ]; then #se verifica primirea unui parametru
 		echo "Va rugam sa introduceti un parametru"
 		exit 1
 	fi
