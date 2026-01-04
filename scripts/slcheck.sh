@@ -9,7 +9,7 @@ declare -A inodes #dictionar pentru inodes(coduri unice ale fisierelor)
 vf_broken_link() {
 	fileToCheck="$1"
 	filename=$(basename "$fileToCheck")
-	
+
 	if [[ -L $fileToCheck ]]; then
 		if [[ -e $fileToCheck ]]; then
 			echo "$filename nu este broken!"
@@ -52,15 +52,15 @@ parcurgere() {
 		vf_broken_link "$item" #functia lui matei
 
 		if [ -d "$item" ]; then
-			if [ -L "$item" ]; then
-				if [ "$follow" = true ]; then
-					local target_inode=$(stat -c %i "$item") #inode pt directorul pe care il accesam prin link
-					if [ -z "${inodes[$target_inode]}" ]; then #daca nu a mai fost vizitat,il parcurgem
+			local target_inode=$(stat -L -c %i "$item") #inode pt directorul pe care vrem sa il accesam
+                        if [ -z "${inodes[$target_inode]}" ]; then #daca nu a mai fost vizitat,continuam
+				if [ -L "$item" ]; then
+					if [ "$follow" = true ]; then
 						parcurgere "$item"
 					fi
+				else
+					parcurgere "$item"
 				fi
-			else
-				parcurgere "$item"
 			fi
 		fi
 	done
