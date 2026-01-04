@@ -14,6 +14,27 @@ vf_broken_link() {
 }
 #cod intermediar,va fi inlocuit
 
+verificari() {
+if [ -z "$1" ] || [ ! -d "$1"]; then #se verifica primirea unui parametru
+        echo "Va rugam sa introduceti un parametru"
+        exit 1
+fi
+
+if [ -n "$2" ]; then #se verifica primirea celui de al doilea parametru
+                case "$2" in
+
+                "-follow-symlinks")
+                        follow=true
+                        ;;
+                *)
+                        echo "Al doilea parametru este invalid"
+                        exit 1
+                        ;;
+                esac
+fi
+
+}
+
 parcurgere() {
 	local dir="$1"
 	local inode_curent=$(stat -c %i "$dir") #selectam doar inode ul
@@ -40,28 +61,5 @@ parcurgere() {
 	done
 }
 
-if [ -z "$1" ]; then #se verifica primirea unui parametru
-	echo "Va rugam sa introduceti un parametru"
-	exit 1
-fi
-
-if [ ! -d "$1" ]; then #se verifica validitatea parametrului
-                echo "Introduceti un director valid"
-                exit 1
-fi
-
-if [ -n "$2" ]; then #se verifica primirea celui de al doilea parametru
-                case "$2" in
-
-                "-follow-symlinks")
-                        follow=true
-                        ;;
-                *)
-                        echo "Al doilea parametru este invalid"
-                        exit 1
-                        ;;
-                esac
-fi
-
-
+verificari "$1" "$2"
 parcurgere "$1"
