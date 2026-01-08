@@ -20,7 +20,7 @@ touch $tempFilePath
 targetDir=$dirPath
 for (( i=1; i<=depth; i++ )); do # se creeaza depth foldere cu:
 	ln -s $tempFilePath "$targetDir/broken_link$i" #un broken link
-	#ln -s "$HOME" "$targetDir/home_link" # un link functional catre folderul home al utilizatorului
+	ln -s "$HOME" "$targetDir/home_link" # un link functional catre folderul home al utilizatorului
 	
 	echo "fisier normal" > "$targetDir/normal file with spaces in name$i.txt" # un fisier cu spatii in nume
 	ln -s "$targetDir/normal file with spaces in name$i.txt" "$targetDir/link with spaces in name$i" # un link catre acesta
